@@ -2,7 +2,6 @@ name: Check Milestone
 on:
   milestone:
     types: [created, opened, edited]
-env:
   DUE_ON: ${{ github.event.milestone.due_on }}
   TITLE: ${{ github.event.milestone.title }}
 permissions:
@@ -10,7 +9,7 @@ permissions:
 jobs:
   spring-releasetrain-checks:    
     name: Check DueOn is on a Release Date
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     if: ${{ github.repository == 'spring-projects/spring-security' }}
     permissions:
       contents: none
@@ -27,7 +26,7 @@ jobs:
     name: Check for failures
     needs: [spring-releasetrain-checks]
     if: failure()
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       actions: read
     steps:

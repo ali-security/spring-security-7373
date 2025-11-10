@@ -1,13 +1,12 @@
 name: Clean build artifacts
 on:
   workflow_dispatch:
-
 permissions:
   contents: read
 
 jobs:
   main:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     if: ${{ github.repository == 'spring-projects/spring-security' }}
     permissions:
       contents: none

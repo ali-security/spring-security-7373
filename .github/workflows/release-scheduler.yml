@@ -1,7 +1,6 @@
 name: Release Scheduler
 on:
   workflow_dispatch:
-permissions: read-all
 jobs:
   dispatch_scheduled_releases:
     name: Dispatch scheduled releases
@@ -10,7 +9,7 @@ jobs:
       matrix:
         # List of active maintenance branches.
         branch: [ main, 6.0.x, 5.8.x, 5.7.x ]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - name: Checkout
       uses: actions/checkout@v3

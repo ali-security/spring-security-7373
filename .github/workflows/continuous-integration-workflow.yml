@@ -5,7 +5,6 @@ on:
     branches:
       - '**'
   workflow_dispatch: # Manual trigger
-
 env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   GRADLE_ENTERPRISE_CACHE_USER: ${{ secrets.GRADLE_ENTERPRISE_CACHE_USER }}
@@ -23,7 +22,7 @@ permissions:
 jobs:
   prerequisites:
     name: Pre-requisites for building
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       runjobs: ${{ steps.continue.outputs.runjobs }}
       project_version: ${{ steps.continue.outputs.project_version }}
@@ -42,7 +41,7 @@ jobs:
     needs: [prerequisites]
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-22.04, windows-2022]
     runs-on: ${{ matrix.os }}
     if: needs.prerequisites.outputs.runjobs
     steps:
@@ -64,7 +63,7 @@ jobs:
           GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_SECRET_ACCESS_KEY }}
         run: ./gradlew clean build --continue -PartifactoryUsername="$ARTIFACTORY_USERNAME" -PartifactoryPassword="$ARTIFACTORY_PASSWORD"
       - name: Upload Maven build artifacts
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-22.04'
         uses: actions/upload-artifact@v4
         with:
           name: built-jars
@@ -72,7 +71,7 @@ jobs:
   snapshot_tests:
     name: Test against snapshots
     needs: [prerequisites]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     if: needs.prerequisites.outputs.runjobs
     steps:
       - uses: actions/checkout@v3
@@ -90,7 +89,7 @@ jobs:
   check_samples:
     name: Check Samples project
     needs: [prerequisites]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     if: needs.prerequisites.outputs.runjobs
     steps:
       - uses: actions/checkout@v3
